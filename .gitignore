@@ -1,0 +1,15 @@
+/build/
+/build*/
+/extern/
+/out/
+vcpkg_installed/
+CMakeUserPresets.json
+.vs/
+.vscode/
+*.user
+
+# dist holds the packaged mod. The INI is source; the binaries are staged by the build.
+/dist/**/*.dll
+/dist/**/*.pdb
+/dist/**/*.exp
+/dist/**/*.lib

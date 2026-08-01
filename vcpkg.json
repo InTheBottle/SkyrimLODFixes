@@ -1,0 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "name": "skyrimlodfixes",
+    "version-string": "0.1.0",
+    "license": "MIT",
+    "builtin-baseline": "ee12231b20c95013c6638d845d04c91559a1d1ff",
+    "dependencies": [
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        },
+        "directxmath",
+        "directxtk",
+        "fmt",
+        "nlohmann-json",
+        "rapidcsv",
+        "simpleini",
+        "spdlog",
+        "toml11",
+        "xbyak"
+    ]
+}
