@@ -4,21 +4,6 @@
 
 namespace
 {
-	bool RuntimeSupported()
-	{
-		if (REL::Module::IsAE()) {
-			return true;
-		}
-
-		const auto* which = REL::Module::IsVR() ? "VR" : "SE";
-		logger::warn(
-			"This build targets Skyrim AE (1.6.x) only; detected {}. No fixes will be "
-			"applied. The internals it relies on were mapped from the AE binary and its "
-			"address-library IDs do not carry over.",
-			which);
-		return false;
-	}
-
 	class LoadWatcher final : public RE::BSTEventSink<RE::MenuOpenCloseEvent>
 	{
 	public:
@@ -48,6 +33,26 @@ namespace
 	private:
 		LoadWatcher() = default;
 	};
+
+	void MessageHandler(SKSE::MessagingInterface::Message* a_msg)
+	{
+		switch (a_msg->type) {
+		case SKSE::MessagingInterface::kDataLoaded:
+			if (auto* ui = RE::UI::GetSingleton()) {
+				ui->AddEventSink<RE::MenuOpenCloseEvent>(&LoadWatcher::Get());
+			}
+			break;
+
+		case SKSE::MessagingInterface::kPostLoadGame:
+		case SKSE::MessagingInterface::kNewGame:
+			LODFix::MapLODFix::Get().OnGameLoaded();
+			LODFix::Diagnostics::LogState("game-loaded");
+			break;
+
+		default:
+			break;
+		}
+	}
 }
 
 SKSEPluginInfo(
@@ -65,29 +70,10 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 
 	LODFix::Settings::Get().Load();
 
-	if (!RuntimeSupported()) {
-		// Loaded, inert, and honest about it.
-		return true;
+	auto messaging = SKSE::GetMessagingInterface();
+	if (!messaging->RegisterListener("SKSE", MessageHandler)) {
+		return false;
 	}
-
-	SKSE::GetMessagingInterface()->RegisterListener([](SKSE::MessagingInterface::Message* a_msg) {
-		switch (a_msg->type) {
-		case SKSE::MessagingInterface::kDataLoaded:
-			if (auto* ui = RE::UI::GetSingleton()) {
-				ui->AddEventSink<RE::MenuOpenCloseEvent>(&LoadWatcher::Get());
-			}
-			break;
-
-		case SKSE::MessagingInterface::kPostLoadGame:
-		case SKSE::MessagingInterface::kNewGame:
-			LODFix::MapLODFix::Get().OnGameLoaded();
-			LODFix::Diagnostics::LogState("game-loaded");
-			break;
-
-		default:
-			break;
-		}
-	});
 
 	return true;
 }

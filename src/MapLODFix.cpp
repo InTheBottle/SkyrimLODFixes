@@ -10,7 +10,9 @@ namespace LODFix
 	{
 		std::uintptr_t ActiveTerrainManager()
 		{
-			static REL::Relocation<std::uintptr_t*> slot{ REL::ID(Offsets::kActiveTerrainManager) };
+			static REL::Relocation<std::uintptr_t*> slot{ REL::VariantID(
+				Offsets::kActiveTerrainManagerSE, Offsets::kActiveTerrainManager,
+				Offsets::kActiveTerrainManagerVR) };
 			auto* p = slot.get();
 			return p ? *p : 0;
 		}
@@ -26,7 +28,9 @@ namespace LODFix
 		void DetachManager(std::uintptr_t a_manager)
 		{
 			using Fn = void (*)(std::uintptr_t, char, char);
-			static REL::Relocation<Fn> detach{ REL::ID(Offsets::kDetachManager) };
+			static REL::Relocation<Fn> detach{ REL::VariantID(
+				Offsets::kDetachManagerSE, Offsets::kDetachManager,
+				Offsets::kDetachManagerVR) };
 			detach(a_manager, 1, 1);
 		}
 
@@ -59,7 +63,9 @@ namespace LODFix
 		// Cells inside this radius are fully loaded, so moving within it strands nothing.
 		std::int32_t GridsToLoad()
 		{
-			static REL::Relocation<std::uint32_t*> slot{ REL::ID(Offsets::kCachedGridsToLoad) };
+			static REL::Relocation<std::uint32_t*> slot{ REL::VariantID(
+				Offsets::kCachedGridsToLoadSE, Offsets::kCachedGridsToLoad,
+				Offsets::kCachedGridsToLoadVR) };
 			auto* p = slot.get();
 			const auto value = p ? *p : 0;
 			return value != 0 ? static_cast<std::int32_t>(value) : 5;
