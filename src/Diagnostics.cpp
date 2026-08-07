@@ -11,7 +11,9 @@ namespace LODFix::Diagnostics
 	{
 		std::uintptr_t ActiveTerrainManager()
 		{
-			static REL::Relocation<std::uintptr_t*> slot{ REL::ID(Offsets::kActiveTerrainManager) };
+			static REL::Relocation<std::uintptr_t*> slot{ REL::VariantID(
+				Offsets::kActiveTerrainManagerSE, Offsets::kActiveTerrainManager,
+				Offsets::kActiveTerrainManagerVR) };
 			auto* p = slot.get();
 			return p ? *p : 0;
 		}
@@ -22,9 +24,9 @@ namespace LODFix::Diagnostics
 			return *reinterpret_cast<T*>(a_base + a_offset);
 		}
 
-		std::uint32_t LockedLevel(std::uint64_t a_id)
+		std::uint32_t LockedLevel(REL::VariantID a_id)
 		{
-			REL::Relocation<std::uint32_t*> slot{ REL::ID(a_id) };
+			REL::Relocation<std::uint32_t*> slot{ a_id };
 			auto* p = slot.get();
 			return p ? *p : 0;
 		}
@@ -121,8 +123,12 @@ namespace LODFix::Diagnostics
 			Read<std::uint32_t>(mgr, kRootLevel),
 			Read<std::uint32_t>(mgr, kUpdateNodesSize),
 			Read<std::uint32_t>(mgr, kNextUpdateNode),
-			LockedLevel(Offsets::kLockedTerrainLOD),
-			LockedLevel(Offsets::kLockedObjectMapLOD),
+			LockedLevel(REL::VariantID(
+				Offsets::kLockedTerrainLODSE, Offsets::kLockedTerrainLOD,
+				Offsets::kLockedTerrainLODVR)),
+			LockedLevel(REL::VariantID(
+				Offsets::kLockedObjectMapLODSE, Offsets::kLockedObjectMapLOD,
+				Offsets::kLockedObjectMapLODVR)),
 			pinned,
 			drawn,
 			pinnedSpan);

@@ -3,15 +3,26 @@
 namespace LODFix::Offsets
 {
 	/** BGSTerrainManager*. The manager the update path currently considers active. */
+	inline constexpr std::uint64_t kActiveTerrainManagerSE = 516111; // 142F23CB8
 	inline constexpr std::uint64_t kActiveTerrainManager = 402262;
+	inline constexpr std::uint64_t kActiveTerrainManagerVR = 0x2FE8BA8;// 142FE8BA8
 
+	inline constexpr std::uint64_t kDetachManagerSE = 31026; // 1404B3190
 	inline constexpr std::uint64_t kDetachManager = 31812;
+	inline constexpr std::uint64_t kDetachManagerVR = 0x04C3260; // 1404C3260
 
-	inline constexpr std::uint64_t kLockedTerrainLOD = 402337;
+	inline constexpr std::uint64_t kLockedTerrainLODSE = 516186; // 142F23EF4
+	inline constexpr std::uint64_t kLockedTerrainLOD = 402337; 
+	inline constexpr std::uint64_t kLockedTerrainLODVR = 0x2FE8DE4; // 142FE8DE4
+
+	inline constexpr std::uint64_t kLockedObjectMapLODSE = 516187; // 142F23EF8
 	inline constexpr std::uint64_t kLockedObjectMapLOD = 402338;
+	inline constexpr std::uint64_t kLockedObjectMapLODVR = 0x2FE8DE8; // 142FE8DE8
 
 	/** Cached `uGridsToLoad`, re-derived at the top of every terrain update. */
+	inline constexpr std::uint64_t kCachedGridsToLoadSE = 516188; // 142F23EFC
 	inline constexpr std::uint64_t kCachedGridsToLoad = 402339;
+	inline constexpr std::uint64_t kCachedGridsToLoadVR = 0x2FE8DEC; // 142FE8DEC
 
 	/** sizeof(BGSTerrainNode); the quadtree is one pooled allocation at this stride. */
 	inline constexpr std::ptrdiff_t kNodeSize = 0x50;
