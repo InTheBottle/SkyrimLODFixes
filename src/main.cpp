@@ -2,6 +2,9 @@
 #include "MapLODFix.h"
 #include "Settings.h"
 
+static_assert(SKSE::RUNTIME_SSE_LATEST_AE >= REL::Version(1, 7, 99, 0),
+	"CommonLibSSE-NG is too old to know Skyrim 1.7.99; use 6.6.0 or newer.");
+
 namespace
 {
 	class LoadWatcher final : public RE::BSTEventSink<RE::MenuOpenCloseEvent>
