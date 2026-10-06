@@ -31,6 +31,7 @@ add_subdirectory("${COMMONLIBSSE_NG_DIR}" CommonLibSSE EXCLUDE_FROM_ALL)
 add_library(
 	${PROJECT_NAME} SHARED
 	src/main.cpp
+	src/InstanceGroupFix.cpp
 	src/MapLODFix.cpp
 	src/Diagnostics.cpp
 	src/Settings.cpp

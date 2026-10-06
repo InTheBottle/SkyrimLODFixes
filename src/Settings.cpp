@@ -24,8 +24,11 @@ namespace LODFix
 		}
 
 		enableLODReset = ini.GetBoolValue("General", "bEnableLODReset", enableLODReset);
+		enableInstanceGroupLock =
+			ini.GetBoolValue("General", "bEnableInstanceGroupLock", enableInstanceGroupLock);
 		logDiagnostics = ini.GetBoolValue("General", "bLogDiagnostics", logDiagnostics);
 
-		logger::info("Config: lodReset={} diagnostics={}", enableLODReset, logDiagnostics);
+		logger::info("Config: lodReset={} instanceGroupLock={} diagnostics={}", enableLODReset,
+			enableInstanceGroupLock, logDiagnostics);
 	}
 }

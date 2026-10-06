@@ -1,4 +1,5 @@
 #include "Diagnostics.h"
+#include "InstanceGroupFix.h"
 #include "MapLODFix.h"
 #include "Settings.h"
 
@@ -72,6 +73,7 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 		SKLF_VERSION_MAJOR, SKLF_VERSION_MINOR, SKLF_VERSION_PATCH);
 
 	LODFix::Settings::Get().Load();
+	LODFix::InstanceGroupFix::Install();
 
 	auto messaging = SKSE::GetMessagingInterface();
 	if (!messaging->RegisterListener("SKSE", MessageHandler)) {

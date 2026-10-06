@@ -8,6 +8,9 @@ namespace LODFix
 	{
 		bool enableLODReset = true;
 
+		/** Culling of tree LOD and grass holds the engine's instance-group lock. */
+		bool enableInstanceGroupLock = true;
+
 		/** One state line on game load and after each loading screen. Off by default. */
 		bool logDiagnostics = false;
 
