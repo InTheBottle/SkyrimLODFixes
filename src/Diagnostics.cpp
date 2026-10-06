@@ -141,4 +141,54 @@ namespace LODFix::Diagnostics
 		}
 	}
 
+	void LogManager(std::string_view a_reason, std::uintptr_t a_manager)
+	{
+		if (!Settings::Get().logDiagnostics || a_manager == 0) {
+			return;
+		}
+
+		using namespace Offsets::TerrainManager;
+		using namespace Offsets::TerrainNode;
+		constexpr std::array kHandles{ kChunkHandle, kBlockHandle, kTreeHandle, kMapChunkHandle,
+			kMapBlockHandle };
+
+		std::array<std::size_t, kHandles.size()> held{};
+		std::size_t blocksDrawn = 0;
+		std::size_t mapBlocksDrawn = 0;
+
+		const auto poolBegin = Read<std::uintptr_t>(a_manager, kNodePoolBegin);
+		const auto poolEnd = Read<std::uintptr_t>(a_manager, kNodePoolEnd);
+		if (poolBegin != 0 && poolEnd > poolBegin) {
+			for (auto node = poolBegin; node + Offsets::kNodeSize <= poolEnd;
+				 node += Offsets::kNodeSize) {
+				for (std::size_t i = 0; i < kHandles.size(); ++i) {
+					if (Read<std::uintptr_t>(node, kHandles[i]) != 0) {
+						++held[i];
+					}
+				}
+				if (NodeGeometry::MapHandleDrawn(Read<std::uintptr_t>(node, kBlockHandle))) {
+					++blocksDrawn;
+				}
+				if (NodeGeometry::MapHandleDrawn(Read<std::uintptr_t>(node, kMapBlockHandle))) {
+					++mapBlocksDrawn;
+				}
+			}
+		}
+
+		const auto* ws = Read<RE::TESWorldSpace*>(a_manager, kWorldSpace);
+		const auto* wsName = ws ? ws->GetFormEditorID() : nullptr;
+
+		logger::info(
+			"[lod:{}] manager {:#x} of {} ({}) initialised={} hasLOD={} | held chunk={} block={} "
+			"tree={} mapChunk={} mapBlock={} | drawn block={} mapBlock={}",
+			a_reason,
+			a_manager,
+			wsName && *wsName ? wsName : "?",
+			a_manager == ActiveTerrainManager() ? "active" : "inactive",
+			Read<bool>(a_manager, kInitialised),
+			Read<bool>(a_manager, kHasLOD),
+			held[0], held[1], held[2], held[3], held[4],
+			blocksDrawn,
+			mapBlocksDrawn);
+	}
 }

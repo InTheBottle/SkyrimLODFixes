@@ -7,6 +7,9 @@ namespace LODFix
 	public:
 		static MapLODFix& Get();
 
+		/** Makes Update's own manager switch use the complete teardown; call at load. */
+		void Install();
+
 		void OnGameLoaded();
 
 		void OnLoadingScreenOpened();
@@ -32,5 +35,8 @@ namespace LODFix
 			const char* a_reason);
 
 		Waypoint _departure;
+
+		// Manager left on the last manager switch; reported again at the next loading screen.
+		std::uintptr_t _departedManager = 0;
 	};
 }

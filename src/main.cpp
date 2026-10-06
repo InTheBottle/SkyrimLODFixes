@@ -73,7 +73,10 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse)
 		SKLF_VERSION_MAJOR, SKLF_VERSION_MINOR, SKLF_VERSION_PATCH);
 
 	LODFix::Settings::Get().Load();
+
+	SKSE::AllocTrampoline(1 << 7);
 	LODFix::InstanceGroupFix::Install();
+	LODFix::MapLODFix::Get().Install();
 
 	auto messaging = SKSE::GetMessagingInterface();
 	if (!messaging->RegisterListener("SKSE", MessageHandler)) {

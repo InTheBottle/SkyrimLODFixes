@@ -32,6 +32,7 @@ namespace LODFix::Offsets
 	{
 		/** Non-zero while the manager is serving the world map rather than the world. */
 		inline constexpr std::ptrdiff_t kMapMode = 0x00;
+		inline constexpr std::ptrdiff_t kWorldSpace = 0x08;
 		inline constexpr std::ptrdiff_t kRootNode = 0x10;
 		inline constexpr std::ptrdiff_t kMaxLevel = 0x1C;
 		/** The descent floor: every LOD walk recurses while `span > minLevel`. */
@@ -63,6 +64,10 @@ namespace LODFix::Offsets
 		inline constexpr std::ptrdiff_t kNodeState = 0x40;
 		inline constexpr std::ptrdiff_t kBaseCellX = 0x48;
 		inline constexpr std::ptrdiff_t kBaseCellY = 0x4A;
+
+		inline constexpr std::ptrdiff_t kChunkHandle = 0x08;
+		inline constexpr std::ptrdiff_t kBlockHandle = 0x10;
+		inline constexpr std::ptrdiff_t kTreeHandle = 0x18;
 
 		/** The world map's own LOD instances -- the handles that leak. */
 		inline constexpr std::ptrdiff_t kMapChunkHandle = 0x20;

@@ -9,16 +9,14 @@ namespace LODFix::InstanceGroupFix
 {
 	namespace
 	{
-		// BSMultiStreamInstanceTriShape vtable slots on SE/AE. VR has one extra virtual ahead
-		// of them; every address derived from these is validated before anything is patched.
+		// SE/AE slots; VR has one more virtual ahead of them.
 		constexpr std::size_t kOnVisibleSlot = 0x34;
 		constexpr std::size_t kAddGroupSlot = 0x3C;
 		constexpr std::size_t kRemoveGroupSlot = 0x3D;
 
 		constexpr std::size_t kMaxScan = 0x400;
 
-		// The engine's lock is a bare flag: `lock cmpxchg 0 -> 1`, Sleep(0) while busy, and a
-		// plain store of 0 to release. It is not recursive.
+		// The engine's lock is a bare, non-recursive 0/1 flag.
 		std::uint32_t*    g_lock = nullptr;
 		thread_local bool t_held = false;
 
@@ -112,8 +110,7 @@ namespace LODFix::InstanceGroupFix
 			static inline REL::Relocation<decltype(Thunk)> original;
 		};
 
-		// The base OnVisible only registers the shape with the accumulator. The groups have
-		// been tested by then, so drop the lock rather than hold it across registration.
+		// The groups are tested by now; don't hold the lock across render registration.
 		struct BaseOnVisible
 		{
 			static void Thunk(void* a_this, void* a_process, std::int32_t a_alphaGroup)
@@ -159,7 +156,6 @@ namespace LODFix::InstanceGroupFix
 		}
 
 		g_lock = addLock;
-		SKSE::AllocTrampoline(1 << 6);
 		BaseOnVisible::original = SKSE::GetTrampoline().write_call<5>(*site, BaseOnVisible::Thunk);
 		OnVisible::original = vtbl.write_vfunc(kOnVisibleSlot + shift, OnVisible::Thunk);
 
